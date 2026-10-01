@@ -15,6 +15,7 @@ const Review_1 = require("./models/Review");
 dotenv_1.default.config();
 const seedDB = async () => {
     try {
+        console.log("Connecting to DB with URI:", process.env.MONGO_URI ? "URI Exists" : "URI Missing");
         const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/tailorconnect';
         await mongoose_1.default.connect(mongoUri);
         console.log('Connected to MongoDB for seeding...');
