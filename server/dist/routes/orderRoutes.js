@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const orderController_1 = require("../controllers/orderController");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const uploadMiddleware_1 = require("../middleware/uploadMiddleware");
+const router = (0, express_1.Router)();
+router.use(authMiddleware_1.protect);
+router.post('/', (0, authMiddleware_1.authorize)('customer'), uploadMiddleware_1.upload.array('designReferences', 5), orderController_1.placeOrder);
+router.get('/', orderController_1.getOrders);
+router.get('/:id', orderController_1.getOrderById);
+router.put('/:id/status', (0, authMiddleware_1.authorize)('tailor'), uploadMiddleware_1.upload.single('milestonePhoto'), orderController_1.updateOrderStatus);
+router.post('/:id/review', (0, authMiddleware_1.authorize)('customer'), orderController_1.createOrderReview);
+exports.default = router;

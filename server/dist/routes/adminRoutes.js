@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_1 = require("../controllers/adminController");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const uploadMiddleware_1 = require("../middleware/uploadMiddleware");
+const router = (0, express_1.Router)();
+router.use(authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin'));
+router.get('/stats', adminController_1.getAdminStats);
+router.get('/users', adminController_1.getUsers);
+router.put('/users/:id/block', adminController_1.toggleUserBlock);
+router.put('/tailors/:id/verify', adminController_1.toggleTailorVerify);
+router.post('/categories', uploadMiddleware_1.upload.single('categoryImage'), adminController_1.createCategory);
+router.delete('/categories/:id', adminController_1.deleteCategory);
+exports.default = router;

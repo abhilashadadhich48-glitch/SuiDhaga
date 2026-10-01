@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2f5d50;
+  --color-secondary: #a3b18a;
+  --color-accent: #d4a373;
+  --color-bg-neutral: #faf8f5;
+  --color-surface: #ffffff;
+  --color-text-primary: #2c2c2c;
+  --color-text-secondary: #6b7280;
+  --color-border-custom: #e8e4de;
+  --font-serif: "Playfair Display", "Cinzel", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* Luxury Light Theme Base Styles */
+body {
+  font-family: var(--font-sans);
+  background-color: #faf8f5;
+  color: #2c2c2c;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar for Luxury Theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #faf8f5;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4a373; /* Camel accent */
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b88a5c;
+}
+
+/* Card details styling with rich floating shadow */
+.card-premium {
+  background: #ffffff;
+  border: 1px solid #e8e4de;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px rgba(44, 44, 44, 0.03), 0 1px 3px rgba(232, 228, 222, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-premium:hover {
+  transform: translateY(-4px);
+  border-color: #2f5d50;
+  box-shadow: 0 20px 40px rgba(47, 93, 80, 0.08), 0 1px 8px rgba(47, 93, 80, 0.03);
+}
+
+/* Premium Inputs with soft transition & active focus ring */
+.input-premium {
+  background-color: #ffffff;
+  border: 1px solid #e8e4de;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  color: #2c2c2c;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.input-premium:focus {
+  border-color: #2f5d50;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(47, 93, 80, 0.08);
+}
+
+/* Double Editorial Border Frame (High-end Atelier feel) */
+.frame-double {
+  border: 1px solid #e8e4de;
+  padding: 4px;
+  position: relative;
+  border-radius: 8px;
+}
+.frame-double::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(212, 163, 115, 0.3); /* Soft Gold border */
+  pointer-events: none;
+  border-radius: 6px;
+}
+
+/* Glass panel */
+.bg-glass-light {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(232, 228, 222, 0.6);
+  border-radius: 12px;
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #d4a373 0%, #2f5d50 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
