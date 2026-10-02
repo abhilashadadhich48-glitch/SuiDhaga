@@ -1,6 +1,16 @@
 import axios from 'axios';
 
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const getFallbackApiUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+      return '/api';
+    }
+  }
+  return 'http://localhost:5001/api';
+};
+
+export const API_URL = import.meta.env.VITE_API_URL || getFallbackApiUrl();
 
 export const getImageUrl = (url?: string): string => {
   if (!url) return '';
