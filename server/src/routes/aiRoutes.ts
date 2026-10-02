@@ -47,25 +47,97 @@ You can view active rates under each tailor's profile page.`
   }
 ];
 
+const callGeminiAPI = async (userPrompt: string, apiKey: string): Promise<string | null> => {
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const systemInstruction = "You are SuiDhaga AI Stylist & Fashion Advisor. Provide helpful, stylish, elegant advice on Indian bespoke attire, fabrics, necklines, tailoring measurements, and outfit customization. Keep responses polite, concise, and structured with bold highlights.";
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: `${systemInstruction}\n\nUser Query: ${userPrompt}` }]
+          }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      console.warn('Gemini API request non-200 status:', response.status);
+      return null;
+    }
+
+    const data: any = await response.json();
+    const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    return replyText || null;
+  } catch (err) {
+    console.warn('Failed to contact Gemini API:', err);
+    return null;
+  }
+};
+
+const callOpenAIAPI = async (userPrompt: string, apiKey: string): Promise<string | null> => {
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'You are SuiDhaga AI Stylist & Fashion Advisor for bespoke tailoring.' },
+          { role: 'user', content: userPrompt }
+        ]
+      })
+    });
+
+    if (!response.ok) return null;
+    const data: any = await response.json();
+    return data?.choices?.[0]?.message?.content || null;
+  } catch (err) {
+    console.warn('Failed to contact OpenAI API:', err);
+    return null;
+  }
+};
+
 router.post('/chat', async (req, res) => {
   try {
-    const { message } = req.body;
-    if (!message) {
+    const message = req.body.message || req.body.prompt || req.body.text;
+    if (!message || typeof message !== 'string' || !message.trim()) {
       return res.status(400).json({ message: 'Message is required.' });
     }
 
-    const lowerMsg = message.toLowerCase();
-    let matchedResponse = '';
+    const trimmedMsg = message.trim();
+    let reply: string | null = null;
 
-    for (const item of KNOWLEDGE_BASE) {
-      if (item.keywords.some(keyword => lowerMsg.includes(keyword))) {
-        matchedResponse = item.response;
-        break;
+    // Check environment variables for Gemini or OpenAI keys
+    const geminiKey = process.env.GEMINI_API_KEY;
+    const openAIKey = process.env.OPENAI_API_KEY;
+
+    if (geminiKey) {
+      reply = await callGeminiAPI(trimmedMsg, geminiKey);
+    } else if (openAIKey) {
+      reply = await callOpenAIAPI(trimmedMsg, openAIKey);
+    }
+
+    // Fallback to Knowledge Base matching if no API key or external call fails
+    if (!reply) {
+      const lowerMsg = trimmedMsg.toLowerCase();
+      for (const item of KNOWLEDGE_BASE) {
+        if (item.keywords.some(keyword => lowerMsg.includes(keyword))) {
+          reply = item.response;
+          break;
+        }
       }
     }
 
-    if (!matchedResponse) {
-      matchedResponse = `Welcome to **SuiDhaga AI Fashion Advisor**! 🧵
+    if (!reply) {
+      reply = `Welcome to **SuiDhaga AI Fashion Advisor**! 🧵
 I can help you with:
 - Fabric recommendations (Lehengas, Sherwanis, Suits)
 - Stitching & measurement guides
@@ -76,10 +148,10 @@ Could you specify what attire or service you are interested in today?`;
     }
 
     return res.status(200).json({
-      reply: matchedResponse,
+      reply,
       timestamp: new Date().toISOString()
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('AI chat error:', error);
     return res.status(500).json({ message: 'Failed to process AI request.' });
   }

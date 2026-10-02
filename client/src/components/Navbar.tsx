@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Scissors, User as UserIcon, LogOut, Menu, X, Bell, Heart } from 'lucide-react';
+import { getImageUrl } from '../services/api';
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -103,7 +104,7 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center gap-3">
                   {user.profilePicture ? (
                     <img
-                      src={user.profilePicture}
+                      src={getImageUrl(user.profilePicture)}
                       alt={user.name}
                       className="h-8 w-8 rounded-full border border-[#e8e4de] object-cover"
                     />
@@ -167,7 +168,7 @@ const Navbar: React.FC = () => {
               <div className="flex items-center gap-3">
                 {user.profilePicture ? (
                   <img
-                    src={user.profilePicture}
+                    src={getImageUrl(user.profilePicture)}
                     alt={user.name}
                     className="h-10 w-10 rounded-full border border-[#e8e4de] object-cover"
                   />

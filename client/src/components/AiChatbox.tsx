@@ -63,7 +63,7 @@ How can I assist you today? You can ask me about:
 
     try {
       const response = await aiAPI.chat(text);
-      const aiReply = response.data.reply;
+      const aiReply = response.data?.reply || response.data?.message || response.data?.text || 'Thank you for reaching out!';
 
       const aiMsg: Message = {
         id: Math.random().toString(),
@@ -72,11 +72,12 @@ How can I assist you today? You can ask me about:
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiMsg]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('AI chat failed:', error);
+      const serverErr = error?.response?.data?.message;
       const errorMsg: Message = {
         id: Math.random().toString(),
-        text: 'Sorry, I am facing a temporary stitching issue. Please try again in a moment!',
+        text: serverErr ? `Notice: ${serverErr}` : 'Sorry, I am facing a temporary stitching issue. Please try again in a moment!',
         sender: 'ai',
         timestamp: new Date()
       };
@@ -86,14 +87,14 @@ How can I assist you today? You can ask me about:
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSendMessage(inputText);
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSendMessage(inputText);
   };
 
   // Helper to simple-parse basic markdown bold text for display
-  const formatText = (text: string) => {
+  const formatText = (text?: string) => {
+    if (!text || typeof text !== 'string') return null;
     return text.split('\n').map((line, idx) => {
       // Basic bold formatting **text**
       const parts = line.split('**');
@@ -195,24 +196,23 @@ How can I assist you today? You can ask me about:
           </div>
 
           {/* Input Panel */}
-          <div className="border-t border-[#e8e4de] bg-white p-3 flex gap-2 rounded-b-2xl">
+          <form onSubmit={handleSubmit} className="border-t border-[#e8e4de] bg-white p-3 flex gap-2 rounded-b-2xl">
             <input
               type="text"
               placeholder="Ask about designs, measurements, fabrics..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              onKeyDown={handleKeyPress}
               disabled={loading}
               className="flex-1 rounded-xl border border-[#e8e4de] px-4 py-2 text-xs focus:border-[#2f5d50] focus:ring-1 focus:ring-[#2f5d50] outline-none font-sans"
             />
             <button
-              onClick={() => handleSendMessage(inputText)}
+              type="submit"
               disabled={loading || !inputText.trim()}
               className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2f5d50] text-[#c5a880] hover:bg-[#204037] transition-all disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
             </button>
-          </div>
+          </form>
         </div>
       )}
     </div>

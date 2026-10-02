@@ -1,6 +1,15 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001/api';
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+
+export const getImageUrl = (url?: string): string => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  const serverBase = API_URL.replace(/\/api\/?$/, '');
+  return `${serverBase}${url.startsWith('/') ? '' : '/'}${url}`;
+};
 
 const api = axios.create({
   baseURL: API_URL,
