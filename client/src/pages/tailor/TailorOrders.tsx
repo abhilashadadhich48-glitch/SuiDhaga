@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { orderAPI } from '../../services/api';
+import { orderAPI, getImageUrl } from '../../services/api';
 import { FileText, Upload, CheckCircle2, ShieldAlert, ChevronDown, ChevronUp, Ruler } from 'lucide-react';
 
 interface Order {
@@ -254,13 +254,13 @@ const TailorOrders: React.FC = () => {
                                 {order.designReferences.map((ref, idx) => (
                                   <a
                                     key={idx}
-                                    href={ref}
+                                    href={getImageUrl(ref)}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="border border-[#e8e4de] p-1 bg-[#faf8f5] hover:opacity-90 transition-opacity"
                                   >
                                     <img
-                                      src={ref}
+                                      src={getImageUrl(ref)}
                                       alt="design reference"
                                       className="h-10 w-10 object-cover"
                                     />

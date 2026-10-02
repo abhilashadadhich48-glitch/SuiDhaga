@@ -37,7 +37,7 @@ const Register: React.FC = () => {
       <div className="hidden lg:flex w-1/2 flex-col justify-center items-center bg-[#eae6df] p-8 border-r border-[#e8e4de] relative">
         <div className="relative h-full max-h-[45vh] aspect-square bg-white p-5 shadow-xl border border-[#e8e4de] transform -rotate-1 hover:rotate-0 transition-transform duration-500 rounded-lg">
           <img
-            src="https://i.pinimg.com/736x/13/73/48/1373480332c8b0b21fb6f9624a30f02a.jpg"
+            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&fit=crop"
             alt="Luxury Couture Stitching"
             className="w-full h-full object-cover rounded filter brightness-[0.95] contrast-[1.02]"
           />

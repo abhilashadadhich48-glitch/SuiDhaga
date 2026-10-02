@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { orderAPI } from '../../services/api';
+import { orderAPI, getImageUrl } from '../../services/api';
 import { Star, ShieldAlert, CheckCircle2, Eye } from 'lucide-react';
 
 interface Order {
@@ -171,7 +171,7 @@ const CustomerOrders: React.FC = () => {
                         {activeMilestone.mediaUrl && (
                           <div className="shrink-0">
                             <img
-                              src={activeMilestone.mediaUrl}
+                              src={getImageUrl(activeMilestone.mediaUrl)}
                               alt="Fabric Sourcing Proof"
                               className="h-12 w-12 object-cover border border-[#e8e4de] rounded-sm"
                             />
@@ -276,13 +276,13 @@ const CustomerOrders: React.FC = () => {
                           Media Proof Attachments
                         </p>
                         <a
-                          href={stone.mediaUrl}
+                          href={getImageUrl(stone.mediaUrl)}
                           target="_blank"
                           rel="noreferrer"
                           className="inline-block relative group"
                         >
                           <img
-                            src={stone.mediaUrl}
+                            src={getImageUrl(stone.mediaUrl)}
                             alt="Stitch update verification"
                             className="h-24 w-auto object-cover border border-[#e8e4de] hover:opacity-90 transition-opacity"
                           />

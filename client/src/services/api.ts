@@ -4,7 +4,7 @@ export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/ap
 
 export const getImageUrl = (url?: string): string => {
   if (!url) return '';
-  if (url.startsWith('http://') || url.startsWith('https://')) {
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
   }
   const serverBase = API_URL.replace(/\/api\/?$/, '');

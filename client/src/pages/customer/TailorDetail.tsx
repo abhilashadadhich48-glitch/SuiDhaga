@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { tailorAPI, orderAPI, appointmentAPI } from '../../services/api';
+import { tailorAPI, orderAPI, appointmentAPI, getImageUrl } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { MapPin, Star, Calendar, Scissors, ChevronLeft, Upload, FileText, CheckCircle2, MessageSquare, AlertCircle } from 'lucide-react';
 
@@ -202,7 +202,7 @@ const TailorDetail: React.FC = () => {
         <div className="bg-white border border-[#e8e4de] p-6 sm:p-10 shadow-sm rounded-lg">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <img
-              src={tailor.profilePicture || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=200&fit=crop'}
+              src={getImageUrl(tailor.profilePicture) || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=200&fit=crop'}
               alt={tailor.name}
               className="h-28 w-28 sm:h-36 sm:w-36 rounded-full border border-[#e8e4de] object-cover"
             />
@@ -333,7 +333,7 @@ const TailorDetail: React.FC = () => {
                 <div key={rev._id} className="bg-white border border-[#e8e4de] p-5 space-y-3 rounded-lg shadow-sm">
                   <div className="flex items-center gap-3">
                     <img
-                      src={rev.customer.profilePicture || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&fit=crop'}
+                      src={getImageUrl(rev.customer.profilePicture) || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&fit=crop'}
                       alt={rev.customer.name}
                       className="h-8 w-8 rounded-full border border-[#e8e4de] object-cover"
                     />

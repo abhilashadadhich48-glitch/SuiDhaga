@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminAPI, categoryAPI } from '../../services/api';
+import { adminAPI, categoryAPI, getImageUrl } from '../../services/api';
 import { CheckCircle2, ShieldAlert, Users, Layers, Award, Coins } from 'lucide-react';
 
 interface Stats {
@@ -240,7 +240,7 @@ const AdminDashboard: React.FC = () => {
                 {categories.map((cat) => (
                   <div key={cat._id} className="bg-white border border-[#e8e4de] p-4 flex gap-3 items-center rounded-lg">
                     <img
-                      src={cat.image}
+                      src={getImageUrl(cat.image)}
                       alt={cat.name}
                       className="h-10 w-10 object-cover border border-[#e8e4de] rounded-sm shrink-0"
                     />

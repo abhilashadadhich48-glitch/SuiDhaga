@@ -34,7 +34,7 @@ const Login: React.FC = () => {
       <div className="hidden lg:flex w-1/2 flex-col justify-center items-center bg-[#eae6df] p-8 border-r border-[#e8e4de] relative">
         <div className="relative h-full max-h-[45vh] aspect-[4/5] bg-white p-5 shadow-xl border border-[#e8e4de] transform rotate-1 hover:rotate-0 transition-transform duration-500 rounded-lg">
           <img
-            src="https://i.pinimg.com/736x/32/94/d1/3294d1331a104cc8250d82bee887a61f.jpg"
+            src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&fit=crop"
             alt="Bespoke Attire"
             className="w-full h-full object-cover rounded filter brightness-[0.95] contrast-[1.02]"
           />

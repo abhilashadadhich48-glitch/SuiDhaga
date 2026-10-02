@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { tailorAPI, categoryAPI } from '../../services/api';
+import { tailorAPI, categoryAPI, getImageUrl } from '../../services/api';
 import { Search, MapPin, Star, Sparkles, SlidersHorizontal, Heart, Users, Scissors, Award, ChevronRight } from 'lucide-react';
 
 interface Tailor {
@@ -332,7 +332,7 @@ const ExploreTailors: React.FC = () => {
                 {tailors.map((tailor) => {
                   const isWishlisted = wishlistedIds.includes(tailor._id);
                   
-                  const coverImg = tailor.profilePicture || 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&fit=crop';
+                  const coverImg = getImageUrl(tailor.profilePicture) || 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&fit=crop';
 
                   return (
                     <div

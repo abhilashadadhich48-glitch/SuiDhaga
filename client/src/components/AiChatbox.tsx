@@ -46,6 +46,59 @@ How can I assist you today? You can ask me about:
     }
   }, [messages, isOpen]);
 
+  const OFFLINE_KNOWLEDGE_BASE = [
+    {
+      keywords: ['lehenga', 'wedding', 'bridal', 'skirt'],
+      response: `For a **Bridal Lehenga**, choice of fabric defines the flare and drape:
+1. **Raw Silk & Velvet:** Royal look with heavy Zardozi embroidery.
+2. **Georgette & Organza:** Lightweight layers with smooth movement.
+3. **Styling Suggestion:** Combine a structured silk skirt with a sheer dupatta.`
+    },
+    {
+      keywords: ['blouse', 'neck', 'saree', 'sleeve', 'pattern'],
+      response: `Popular necklines trending this season:
+1. **Queen Anne & Sweetheart:** Timeless bridal silhouette.
+2. **Corset & Bustier style:** Modern padded fit for sheer sarees.
+3. **Keyhole Back with Tassels:** Elegant focal point for silk blouses.`
+    },
+    {
+      keywords: ['measure', 'size', 'chest', 'waist', 'fit'],
+      response: `Quick Measurement Tips:
+1. **Chest:** Measure around the fullest part keeping tape horizontal.
+2. **Waist:** Natural waistline above navel.
+3. **Comfort Tip:** Keep one finger under tape for movement allowance.`
+    },
+    {
+      keywords: ['sherwani', 'kurta', 'suit', 'men', 'blazer'],
+      response: `For Men's Bespoke Couture:
+1. **Fabrics:** Banarasi Silk for weddings, Linen/Khadi for festive daytime.
+2. **Fit:** Ensure shoulder seams align with your natural shoulder bone.
+3. **Length:** Knee-length sherwanis look sleek with slim churidars.`
+    },
+    {
+      keywords: ['price', 'cost', 'rate', 'estimate'],
+      response: `Custom Tailoring Estimates:
+- **Blouses & Kurtas:** ₹800 - ₹2,500
+- **Designer Suits:** ₹5,000 - ₹12,000
+- **Bridal Wear:** ₹15,000 - ₹50,000+
+View active rate cards on atelier profiles!`
+    }
+  ];
+
+  const getOfflineReply = (query: string): string => {
+    const lower = query.toLowerCase();
+    for (const item of OFFLINE_KNOWLEDGE_BASE) {
+      if (item.keywords.some(kw => lower.includes(kw))) {
+        return item.response;
+      }
+    }
+    return `Hello! 🧵✨ I am your **SuiDhaga AI Stylist**. Ask me about:
+- **Fabric choices** (Silk, Velvet, Georgette, Organza)
+- **Measurement guides** for bespoke fit
+- **Neck & sleeve pattern ideas**
+- **Tailoring price ranges**`;
+  };
+
   const handleSendMessage = async (textToSend: string) => {
     const text = textToSend.trim();
     if (!text) return;
@@ -63,7 +116,7 @@ How can I assist you today? You can ask me about:
 
     try {
       const response = await aiAPI.chat(text);
-      const aiReply = response.data?.reply || response.data?.message || response.data?.text || 'Thank you for reaching out!';
+      const aiReply = response.data?.reply || response.data?.message || response.data?.text || getOfflineReply(text);
 
       const aiMsg: Message = {
         id: Math.random().toString(),
@@ -73,15 +126,15 @@ How can I assist you today? You can ask me about:
       };
       setMessages(prev => [...prev, aiMsg]);
     } catch (error: any) {
-      console.error('AI chat failed:', error);
-      const serverErr = error?.response?.data?.message;
-      const errorMsg: Message = {
+      console.warn('AI chat server request failed, falling back to local advisor:', error);
+      const aiReply = getOfflineReply(text);
+      const aiMsg: Message = {
         id: Math.random().toString(),
-        text: serverErr ? `Notice: ${serverErr}` : 'Sorry, I am facing a temporary stitching issue. Please try again in a moment!',
+        text: aiReply,
         sender: 'ai',
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, errorMsg]);
+      setMessages(prev => [...prev, aiMsg]);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { appointmentAPI } from '../../services/api';
+import { appointmentAPI, getImageUrl } from '../../services/api';
 import { Calendar, MessageSquare, Compass } from 'lucide-react';
 
 interface Appointment {
@@ -73,7 +73,7 @@ const CustomerAppointments: React.FC = () => {
               >
                 <div className="flex items-center gap-4">
                   <img
-                    src={appt.tailor.profilePicture || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=100&fit=crop'}
+                    src={getImageUrl(appt.tailor.profilePicture) || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=100&fit=crop'}
                     alt={appt.tailor.name}
                     className="h-12 w-12 rounded-full object-cover border border-[#e8e4de]"
                   />
