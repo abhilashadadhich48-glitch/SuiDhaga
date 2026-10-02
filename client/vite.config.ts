@@ -7,12 +7,12 @@ export default defineConfig({
   base: '/',
   plugins: [react(), tailwindcss()],
   build: {
-    // Ensure source maps are off for production (smaller bundle)
+    // No source maps in production (smaller bundle, faster load)
     sourcemap: false,
-    // Rollup options to ensure clean chunking
     rollupOptions: {
       output: {
-        // Keep asset filenames deterministic for caching
+        // Content-hash filenames: every deploy gets new unique URLs → safe for 1-year cache headers
+        // Example: index-DQ_0xg3i.css — the hash changes whenever file content changes
         assetFileNames: 'assets/[name]-[hash][extname]',
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
