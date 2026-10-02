@@ -1,10 +1,14 @@
 import axios from 'axios';
 
+// Production backend URL on Render.com
+const PRODUCTION_API_URL = 'https://suidhaga-wx3o.onrender.com/api';
+
 const getFallbackApiUrl = (): string => {
   if (typeof window !== 'undefined') {
     const hostname = window.location.hostname;
     if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-      return '/api';
+      // In production, always use the Render.com backend
+      return PRODUCTION_API_URL;
     }
   }
   return 'http://localhost:5001/api';
@@ -14,10 +18,16 @@ export const API_URL = import.meta.env.VITE_API_URL || getFallbackApiUrl();
 
 export const getImageUrl = (url?: string): string => {
   if (!url) return '';
+  // Already an absolute URL (http, https, or data URI) — return as-is
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
     return url;
   }
-  const serverBase = API_URL.replace(/\/api\/?$/, '');
+  // Build the server base from API_URL, stripping trailing /api
+  let serverBase = API_URL.replace(/\/api\/?$/, '');
+  // If serverBase is still a relative path (e.g. "/api" was used), use the Render URL
+  if (!serverBase.startsWith('http')) {
+    serverBase = 'https://suidhaga-wx3o.onrender.com';
+  }
   return `${serverBase}${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
